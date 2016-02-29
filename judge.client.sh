@@ -57,8 +57,6 @@ if [ ! -e "/built" ]; then
     echo "store_folder = '$store_folder'" >> config.py
     ### cgroup
     cgroupfs_mount
-    pip3 install --upgrade pip
-    pip install psycopg2
 fi
 cd /judge-client
 python3 judge.py

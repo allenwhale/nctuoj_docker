@@ -3,7 +3,7 @@ ADD judge.client.sh /judge.client.sh
 VOLUME ["/mnt/nctuoj"]
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get -y install curl gcc python python3 python3-pip git perl ruby ghc bison make postgresql-server-dev-all software-properties-common
+RUN apt-get -y install curl gcc python python3 git perl ruby ghc bison make postgresql-server-dev-all software-properties-common
 RUN add-apt-repository -y ppa:webupd8team/java
 RUN apt-get update
 RUN apt-get -y upgrade
