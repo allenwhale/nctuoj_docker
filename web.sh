@@ -1,4 +1,22 @@
 #!/bin/bssh
+install_and_use_nvm(){
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+    . /root/.nvm/nvm.sh
+    nvm install v5.6.0 
+    nvm use v5.6.0
+}
+nctuoj_repo_update() {
+    cd /nctuoj
+    git pull --rebase
+    pip3 install --upgrade -r requirements.txt 
+    git submodule init 
+    git submodule sync
+    git submodule update
+    install_and_use_nvm
+    cd /nctuoj/http/pdf.js
+    npm install 
+    node make generic
+}
 if [ ! -e "/built" ]; then
     touch /built
     set -e
@@ -37,27 +55,9 @@ if [ ! -e "/built" ]; then
         && echo "DBPORT = $DBPORT" >> config.py \
         && echo "PORT = $PORT" >> config.py \
         && echo "DEBUG = False" >> config.py
-    cd /nctuoj
-    pip3 install -r requirements.txt 
-    git submodule init 
-    git submodule sync
-    git submodule update
-    update-rc.d redis-server defaults 
-    pip3 install --upgrade pip
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
-    . /root/.nvm/nvm.sh
-    nvm install v5.6.0 
-    nvm use v5.6.0
-    cd http/pdf.js
-    npm install 
-    node make generic
+    nctuoj_repo_update
 else
-    cd /nctuoj
-    git pull --rebase
-    pip3 install -r requirements.txt 
-    git submodule init 
-    git submodule sync
-    git submodule update
+    nctuoj_repo_update
 fi
 cd /nctuoj/backend
 service redis-server start
