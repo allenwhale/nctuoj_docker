@@ -21,7 +21,7 @@ if [ ! -e "/built" ]; then
         judgecenter_port=3118
     fi 
     pip3 install --upgrade pip
-    pip install psycopg2
+    pip3 install psycopg2
     cd /
     git clone https://github.com/Tocknicsu/judge-center.git
     cd judge-center
@@ -32,6 +32,10 @@ if [ ! -e "/built" ]; then
     echo "db_dbname = '$db_dbname'" >> config.py
     echo "db_password = '$db_password'" >> config.py
     echo "judgecenter_port = $judgecenter_port" >> config.py
+else
+    cd /judge-center
+    git pull --rebase
 fi
 cd /judge-center
 python3 judgecenter.py
+# docker run -itd --name oj_judge_center -e db_host=oj_db -e db_user=nctuoj -e db_password=nctuoj -e db_dbname=nctuoj  --link oj_db:oj_db -P judge_center

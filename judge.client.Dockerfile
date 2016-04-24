@@ -1,5 +1,4 @@
 FROM ubuntu:15.04
-ADD judge.client.sh /judge.client.sh
 VOLUME ["/mnt/nctuoj"]
 RUN apt-get update
 RUN apt-get -y upgrade
@@ -13,4 +12,5 @@ RUN apt-get clean
 RUN apt-get autoclean
 RUN apt-get autoremove
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ADD judge.client.sh /judge.client.sh
 ENTRYPOINT ["bash", "./judge.client.sh"]

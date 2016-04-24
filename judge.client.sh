@@ -56,7 +56,16 @@ if [ ! -e "/built" ]; then
     echo "judgecenter_port = $judgecenter_port" >> config.py
     echo "store_folder = '$store_folder'" >> config.py
     ### cgroup
-    cgroupfs_mount
+else
+    cd /judge-client
+    git pull --rebase
+    . /root/.nvm/nvm.sh
+    . /root/.gvm/scripts/gvm
+    gvm use go1.6
+    nvm use v5.6.0
 fi
+cgroupfs_mount
 cd /judge-client
 python3 judge.py
+# docker run -itd --privileged --name oj_judge_client --link oj_judge_center:oj_judge_center -e judgecenter_host=oj_judge_center -P -v /mnt/nctuoj:/mnt/nctuoj judge_client
+# --privileged 是為了讓container有權限mount cgroupfs才能跑isolate

@@ -1,4 +1,4 @@
-FROM ubuntu:15.04
+FROM ubuntu:16.04
 ARG PORT=3118
 ENV PORT=$PORT
 COPY judge.center.sh /judge.center.sh

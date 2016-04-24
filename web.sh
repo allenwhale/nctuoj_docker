@@ -26,23 +26,9 @@ if [ ! -e "/built" ]; then
     echo "DBHOST = '$DBHOST'"   
     echo "DBPORT = $DBPORT"   
     echo "PORT = $PORT"  
-    update-rc.d redis-server defaults 
-    pip3 install --upgrade pip
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
-    . /root/.nvm/nvm.sh
-    nvm install v5.6.0 
-    nvm use v5.6.0
     cd /
     git clone https://github.com/Tocknicsu/nctuoj.git
-    cd nctuoj
-    pip install -r requirements.txt 
-    git submodule init 
-    git submodule sync
-    git submodule update
-    cd http/pdf.js
-    npm install 
-    node make generic
-    cd ../../backend
+    cd /nctuoj/backend
     cp config.py.sample config.py \
         && echo "DBUSER = '$DBUSER'" >> config.py \
         && echo "DBPASSWORD = '$DBPASSWORD'" >> config.py \
@@ -51,7 +37,68 @@ if [ ! -e "/built" ]; then
         && echo "DBPORT = $DBPORT" >> config.py \
         && echo "PORT = $PORT" >> config.py \
         && echo "DEBUG = False" >> config.py
+    cd /nctuoj
+    pip3 install -r requirements.txt 
+    git submodule init 
+    git submodule sync
+    git submodule update
+    update-rc.d redis-server defaults 
+    pip3 install --upgrade pip
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+    . /root/.nvm/nvm.sh
+    nvm install v5.6.0 
+    nvm use v5.6.0
+    cd http/pdf.js
+    npm install 
+    node make generic
+else
+    cd /nctuoj
+    git pull --rebase
+    pip3 install -r requirements.txt 
+    git submodule init 
+    git submodule sync
+    git submodule update
 fi
 cd /nctuoj/backend
 service redis-server start
 python3 server.py
+# run script
+# docker build -t web -f web.Dockerfile .
+# docker run -itd --link oj_db:oj_db -e DBNAME=nctuoj -e DBUSER=nctuoj -e DBPASSWORD=nctuoj -e DBHOST=oj_db --name oj_web -p 3018:3018 -v /mnt/nctuoj:mnt/nctuoj web
+
+# 每當這個container被start的時候(包括run)，都會執行web.sh
+# web.sh只有在第一次執行的時候才會設定config
+# 第二次以後只會更新repo
+
+
+# docker build 
+#   -f <Dockerfile>
+#   -t <image name>
+#   最後那個"."要記得加
+
+# docker run
+#   -i  interactive
+#   -t  has tty
+#   -d  run in background
+#   --link <docker name>:<alias>    link <docker name> into container as <alias>
+#   -e <env name>=<env val>     set <env name>=<env val>
+#   -p <host port>:<container port> forward <host port> to <container port>
+#   -v <host src>:<container dest>  mount <host src> to <container dest>
+#   --name <name>   give a name to this container
+
+# docker attach (attach a background container)
+#   docker attach <docker name | container id>
+#   <ctrl-p> + <ctrl-q> leave the container
+
+# docker exec (run a command in a running container)
+#   -i  interactive
+#   -t  has tty
+#   ex: docker exec <docker name | container id> /bin/sh
+#       run `/bin/sh` in container
+
+# docker stop (stop a container)
+#   ex: docker stop <docker name | container id>
+
+# docker start (start a container)
+#   ex: docker start <docker name | container id>
+
