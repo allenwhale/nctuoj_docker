@@ -19,8 +19,7 @@ nctuoj_repo_update() {
         node make generic
     fi
 }
-if [ ! -e "/built" ]; then
-    touch /built
+if [ ! -d "/nctuoj" ]; then
     set -e
     if [ "$DOCKERHOST" = "" ]; then
         DOCKERHOST="172.17.42.1";
