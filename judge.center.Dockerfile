@@ -1,4 +1,8 @@
 FROM ubuntu:16.04
+RUN locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8 
+ENV TZ=Asia/Taipei
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ARG PORT=3118
 ENV PORT=$PORT
 COPY judge.center.sh /judge.center.sh

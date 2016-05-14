@@ -1,4 +1,8 @@
 FROM ubuntu:15.04
+RUN locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8 
+ENV TZ=Asia/Taipei
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 VOLUME ["/mnt/nctuoj"]
 RUN apt-get update
 RUN apt-get -y upgrade

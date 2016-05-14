@@ -1,4 +1,8 @@
 FROM ubuntu:16.04
+RUN locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8 
+ENV TZ=Asia/Taipei
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV HOME=/root
 ARG PORT=3018
 ENV PORT=$PORT
