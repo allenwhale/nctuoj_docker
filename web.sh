@@ -14,10 +14,8 @@ nctuoj_repo_update() {
     git submodule update
     install_and_use_nvm
     cd /nctuoj/http/pdf.js
-    if [ -d ".git" ]; then
-        npm install 
-        node make generic
-    fi
+    npm install 
+    node make generic
 }
 if [ ! -d "/nctuoj" ]; then
     set -e
